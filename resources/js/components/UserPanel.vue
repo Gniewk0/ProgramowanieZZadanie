@@ -1,38 +1,41 @@
 <template>
-    <div>
-        <form class="d-flex justify-content-center" v-on:submit.prevent>
-            <div class="form-row align-items-center">
-                <div class="col-auto">
-                    <label class="sr-only" for="inlineFormInput">Produkt</label>
-                    <input type="text" class="form-control mb-2" id="inlineFormInput" placeholder="Produkt" v-model="new_product">
-                </div>
-                <!-- <div class="col-2">
-                    <label class="sr-only" for="inlineFormInput">ilość</label>
-                    <input type="number" class="form-control mb-2" id="inlineFormInput" placeholder="ilość">
-                </div> -->
-                <div class="col-auto">
-                    <button class="btn btn-primary mb-2" @click="AddProducktToList">Dodaj</button>
-                </div>
-            </div>
-        </form>
+<div>
+    <transition name="fade" mode="out-in">
+        <ListModal v-if="showModal" @close="showModal = false" id="exampleModal"></ListModal>
+    </transition>
 
-        <ul class="list-group mx-5 px-5">
-            <li class="list-group-item" v-for="product in list" :key="product">{{product}}</li>
-        </ul>
-    </div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-0">
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <button class="btn btn-outline-secondary mx-2 my-sm-0" >Lista</button>
+                </li>
+                <li class="nav-item">
+                    <button class="btn btn-outline-secondary mx-2 my-sm-0" @click="showModal = true">Dodaj liste</button>
+                </li>
+
+            </ul>
+            <form class="form-inline my-2 my-lg-0 py-2">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Szukaj</button>
+            </form>
+        </div>
+    </nav>
+</div>
 </template>
 
 <script>
-    // import Magicbutton from './Magicbutton';
+    import ListModal from './UserPanelListModal';
     export default {
         data(){
             return {
                 new_product: '',
-                list: ['papryka','pomidor','ogórek','placki','kukurydza','kurczak'],
+                list: [],
+                showModal: false,
             }
         },
         components: {
-            // Magicbutton
+            ListModal
         },
         mounted() {
         },
@@ -44,6 +47,13 @@
             AddProducktToList(){
                 this.list.push(this.new_product)
                 this.new_product = ''
+            },
+            DeleteProduct(product){
+                for( var i = 0; i < this.list.length; i++){
+                    if ( this.list[i] === product) {
+                        this.list.splice(i, 1);
+                    }
+                }
             },
             getText(){
                 axios.get('/usertextget', { textarea: this.textarea })
