@@ -15,7 +15,9 @@ class CreateListItemsTable extends Migration
     {
         Schema::create('list_items', function (Blueprint $table) {
             $table->id();
-            $table->integer('user_id');
+            $table->integer('product_list_id');
+            $table->string('product_name', 30);
+            $table->boolean('is_bought')->default(false);
             $table->timestamps();
         });
     }

@@ -7,7 +7,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-0">
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
+                <li class="nav-item">
                     <button class="btn btn-outline-secondary mx-2 my-sm-0" >Lista</button>
                 </li>
                 <li class="nav-item">
@@ -21,11 +21,15 @@
             </form>
         </div>
     </nav>
+    <div class="px-2 py-2">
+        <List></List>
+    </div>
 </div>
 </template>
 
 <script>
     import ListModal from './UserPanelListModal';
+    import List from './UserPanelLists';
     export default {
         data(){
             return {
@@ -35,7 +39,8 @@
             }
         },
         components: {
-            ListModal
+            ListModal,
+            List
         },
         mounted() {
         },

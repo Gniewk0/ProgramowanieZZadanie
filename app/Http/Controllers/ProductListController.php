@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ListItem;
 use App\Models\ProductList;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProductListController extends Controller
 {
@@ -12,9 +14,9 @@ class ProductListController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        return ProductList::with('listitem')->where('user_id', '=', Auth::user()->id)->get();
     }
 
     /**
@@ -35,7 +37,24 @@ class ProductListController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user_id = Auth::user()->id;
+
+        $list = new ProductList;
+        $list->user_id = $user_id;
+        $list->name = $request->name;
+        $list->date = $request->date;
+        $list->save();
+
+        $list_id = $list->id;
+
+        for($i=0;$i<count($request->list);$i++){
+            $item = new ListItem;
+            $item->product_list_id = $list_id;
+            $item->product_name = $request->list[$i];
+            $item->save();
+        }
+
+        return ['message' => 'list created'];
     }
 
     /**
@@ -67,9 +86,15 @@ class ProductListController extends Controller
      * @param  \App\Models\ProductList  $productList
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ProductList $productList)
+    public function update(Request $request)
     {
-        //
+        dd($request);
+        $user_id = Auth::user()->id;
+        UserText::where('user_id', '=', $user_id)->update([
+            'user_id' => $user_id,
+            'text' => $request->textarea,
+        ]);
+        return ['message' => 'text update'];
     }
 
     /**

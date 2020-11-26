@@ -15,8 +15,9 @@ class CreateProductListsTable extends Migration
     {
         Schema::create('product_lists', function (Blueprint $table) {
             $table->id();
-            $table->integer('list_id');
-            $table->text('product');
+            $table->string('name', 30);
+            $table->integer('user_id');
+            $table->date('date');
             $table->timestamps();
         });
     }

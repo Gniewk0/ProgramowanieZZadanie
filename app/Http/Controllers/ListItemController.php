@@ -67,9 +67,12 @@ class ListItemController extends Controller
      * @param  \App\Models\ListItem  $listItem
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, ListItem $listItem)
+    public function update(Request $request)
     {
-        //
+        ListItem::where('id', '=',  $request->product['id'])->update([
+            'is_bought' => $request->product['is_bought'],
+        ]);
+        return[ 'mesage' => 'list was updated'];
     }
 
     /**

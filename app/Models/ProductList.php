@@ -11,10 +11,10 @@ class ProductList extends Model
 
     public function user()
     {
-        return $this->belongsTo('App\Models\User');
+        return $this->hasOne('App\Models\User');
     }
 
-    public function listitems()
+    public function listitem()
     {
         return $this->hasMany('App\Models\ListItem');
     }

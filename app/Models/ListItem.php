@@ -11,6 +11,6 @@ class ListItem extends Model
 
     public function productlist()
     {
-        return $this->belongsTo('App\Models\ProductList');
+        return $this->hasOne('App\Models\ProductList');
     }
 }
