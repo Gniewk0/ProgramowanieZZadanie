@@ -44,7 +44,7 @@
                     <button type="button" class="btn btn-secondary" @click="$emit('close')">
                         zamknij
                     </button>
-                    <button type="button" class="btn btn-secondary" @click=postList()>
+                    <button type="button" class="btn btn-secondary" @click="postList(), $emit('close')">
                         utwórz komunikat
                     </button>
                 </div>

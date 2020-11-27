@@ -15,10 +15,11 @@ class CreateListItemsTable extends Migration
     {
         Schema::create('list_items', function (Blueprint $table) {
             $table->id();
-            $table->integer('product_list_id');
             $table->string('product_name', 30);
             $table->boolean('is_bought')->default(false);
             $table->timestamps();
+
+            $table->foreign('product_list_id')->references('id')->on('product_lists')->onDelete('cascade');
         });
     }
 

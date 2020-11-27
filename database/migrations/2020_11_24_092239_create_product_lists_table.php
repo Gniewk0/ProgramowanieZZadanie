@@ -18,6 +18,7 @@ class CreateProductListsTable extends Migration
             $table->string('name', 30);
             $table->integer('user_id');
             $table->date('date');
+            $table->tinyInteger('pending')->default(0);
             $table->timestamps();
         });
     }

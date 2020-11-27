@@ -16,7 +16,12 @@ class ProductListController extends Controller
      */
     public function index(Request $request)
     {
-        return ProductList::with('listitem')->where('user_id', '=', Auth::user()->id)->get();
+        return ProductList::with('listitem')->where('user_id', '=', Auth::user()->id)->where('pending', '=', 1)->get();
+    }
+
+    public function archiveindex(Request $request)
+    {
+        return ProductList::with('listitem')->where('user_id', '=', Auth::user()->id)->where('pending', '=', 0)->get();
     }
 
     /**
@@ -43,6 +48,7 @@ class ProductListController extends Controller
         $list->user_id = $user_id;
         $list->name = $request->name;
         $list->date = $request->date;
+        $list->pending = 1;
         $list->save();
 
         $list_id = $list->id;
@@ -89,12 +95,14 @@ class ProductListController extends Controller
     public function update(Request $request)
     {
         dd($request);
-        $user_id = Auth::user()->id;
-        UserText::where('user_id', '=', $user_id)->update([
-            'user_id' => $user_id,
-            'text' => $request->textarea,
+    }
+
+    public function archiveupdate(Request $request)
+    {
+        ProductList::where('id', '=',  $request->id)->update([
+            'pending' => 0,
         ]);
-        return ['message' => 'text update'];
+        return[ 'mesage' => 'list was added to archives'];
     }
 
     /**
@@ -103,8 +111,10 @@ class ProductListController extends Controller
      * @param  \App\Models\ProductList  $productList
      * @return \Illuminate\Http\Response
      */
-    public function destroy(ProductList $productList)
+    public function destroy(Request $request)
     {
-        //
+        ProductList::where('id', '=',  $request->id)->delete();
+
+        return[ 'mesage' => 'list was deleted'];
     }
 }

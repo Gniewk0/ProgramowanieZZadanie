@@ -8,12 +8,19 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <button class="btn btn-outline-secondary mx-2 my-sm-0" >Lista</button>
+                    <router-link class="btn btn-outline-secondary mx-2 my-sm-0" :to="{ name: 'Index'}">
+                        <span>Aktualne listy</span>
+                    </router-link>
+                    <!-- <button class="btn btn-outline-secondary mx-2 my-sm-0" >Lista</button> -->
                 </li>
                 <li class="nav-item">
                     <button class="btn btn-outline-secondary mx-2 my-sm-0" @click="showModal = true">Dodaj liste</button>
                 </li>
-
+                <li class="nav-item">
+                    <router-link class="btn btn-outline-secondary mx-2 my-sm-0" :to="{ name: 'Archive'}">
+                        <span>Archiwum</span>
+                    </router-link>
+                </li>
             </ul>
             <form class="form-inline my-2 my-lg-0 py-2">
                 <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
@@ -22,31 +29,42 @@
         </div>
     </nav>
     <div class="px-2 py-2">
-        <List></List>
+        <!-- <List></List> -->
+        <transition name="fade" mode="out-in">
+           <router-view></router-view>
+        </transition>
     </div>
 </div>
 </template>
 
 <script>
+import VueRouter from 'vue-router';
+Vue.use(VueRouter);
+import router from '../router'
     import ListModal from './UserPanelListModal';
-    import List from './UserPanelLists';
     export default {
         data(){
             return {
                 new_product: '',
                 list: [],
                 showModal: false,
+                listReload: false,
             }
         },
         components: {
             ListModal,
-            List
         },
         mounted() {
+            router.push({name: 'Index'}).catch(()=>{});
         },
         computed: {
         },
         watch: {
+            showModal(newVal, oldVal) {
+                if(newVal == false){
+                    this.$store.commit('getData', newVal);
+                }
+            }
         },
         methods: {
             AddProducktToList(){
