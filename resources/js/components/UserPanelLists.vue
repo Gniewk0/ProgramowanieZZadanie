@@ -1,10 +1,12 @@
 <template>
     <div>
         <transition name="fade" mode="out-in">
-            <ListModal v-if="showEdit" @close="showEdit = false" id="exampleModal" :modalEditId="modalEditId"></ListModal>
+            <ListModal v-if="showEdit" @close="showEdit = false" id="exampleModal" :modalEditId="modalEditId" :modalEditName="modalEditName" :modalEditDate="modalEditDate">
+                Edytuj Liste
+            </ListModal>
         </transition>
         <div id="accordion" class="mx-5 px-5">
-            <div class="card my-2" v-for="list in lists" :key="list.id">
+            <div class="card my-2" v-for="list in mainlist" :key="list.id">
                 <div class="card-header" v-bind:id="'heading'+list.id">
                     <h5 class="mb-0">
                         <button class="btn btn-link" data-toggle="collapse" v-bind:data-target="'#collapse'+list.id" v-bind:aria-controls="'collapse'+list.id">
@@ -16,7 +18,7 @@
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
                                     <a class="dropdown-item" href="#" @click="AddToArchive(list.id)">zarchiwizuj</a>
-                                    <a class="dropdown-item" href="#" @click="modalEditId = list.id, showEdit = true">edytuj</a>
+                                    <a class="dropdown-item" href="#" @click="modalEditId = list.id, modalEditName = list.name, modalEditDate = list.date, showEdit = true">edytuj</a>
                                 </div>
                             </div>
                         </div>
@@ -75,18 +77,25 @@
             vuexdata(){
                 return this.$store.getters.getData
             },
+            mainlist: {
+                get () {
+                    return this.$store.getters.getList
+                },
+                set (value) {
+                    this.$store.commit('getList', value);
+                }
+            },
         },
         watch: {
             vuexdata(newVal, oldVal) {
-                // console.log(newVal)
                 if(newVal == false){
-                    this.getLists();
+                    this.getList();
                     this.$store.commit('getData', true);
                 }
             }
         },
         mounted() {
-            this.getLists();
+            this.getList();
         },
         methods: {
             testadd(){
@@ -98,14 +107,12 @@
                     .then(response => this.disabledCheckbox = false)
                     .catch(error => this.errors.record(error.response.data));
             },
-            getLists(){
-                axios.get('/list')
-                    .then(response => this.lists = response.data)
-                    .catch(error => this.errors.record(error.response.data));
+            getList(){
+                this.$store.dispatch('getList');
             },
             AddToArchive(id){
                 axios.post('/archivelist', {id: id})
-                    .then(response => this.getLists())
+                    .then(response => this.getList())
                     .catch(error => this.errors.record(error.response.data));
             }
         }

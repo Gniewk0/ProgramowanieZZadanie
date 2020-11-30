@@ -2229,6 +2229,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 
 Vue.use(vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]);
 
@@ -2345,6 +2347,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2355,18 +2360,45 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
-    this.getList();
-
     if (this.modalEditId) {
-      this.getList();
+      console.log('wbijam do funkcji');
+      this.date = this.modalEditDate;
+      this.name = this.modalEditName;
+
+      for (var i = 0; i < this.mainlist.length; i++) {
+        console.log('wbijam do pętli');
+
+        if (this.mainlist[i].id == this.modalEditId) {
+          for (var j = 0; j < this.mainlist[i].listitem.length; j++) {
+            this.list.push(this.mainlist[i].listitem[j].product_name);
+          }
+        }
+      }
+    } else if (this.modaldata) {
+      this.list = this.modaldata;
     }
   },
   props: {
-    modalEditId: Number
+    modalEditId: Number,
+    modalEditName: String,
+    modalEditDate: String,
+    modaldata: Array
   },
-  computed: {},
+  computed: {
+    mainlist: {
+      get: function get() {
+        return this.$store.getters.getList;
+      },
+      set: function set(value) {
+        this.$store.commit('getList', value);
+      }
+    }
+  },
   watch: {},
   methods: {
+    emitMethod: function emitMethod() {
+      this.$emit('close');
+    },
     addProducktToList: function addProducktToList() {
       this.list.push(this.new_product);
       this.new_product = '';
@@ -2378,27 +2410,31 @@ __webpack_require__.r(__webpack_exports__);
         }
       }
     },
-    getList: function getList() {
+    postList: function postList() {
       var _this = this;
 
-      axios.get('/list').then(function (response) {
-        return _this.list = response.data;
-      })["catch"](function (error) {
-        return _this.errors.record(error.response.data);
-      });
-    },
-    postList: function postList() {
-      var _this2 = this;
-
-      axios.post('/list', {
-        list: this.list,
-        name: this.name,
-        date: this.date
-      }).then(function (response) {
-        return console.log(response.data);
-      })["catch"](function (error) {
-        return _this2.errors.record(error.response.data);
-      });
+      if (!this.modalEditId) {
+        axios.post('/list', {
+          list: this.list,
+          name: this.name,
+          date: this.date
+        }).then(function (response) {
+          return _this.emitMethod();
+        })["catch"](function (error) {
+          return console.log(error.response.data);
+        });
+      } else {
+        axios.put('/list', {
+          id: this.modalEditId,
+          list: this.list,
+          name: this.name,
+          date: this.date
+        }).then(function (response) {
+          return _this.emitMethod();
+        })["catch"](function (error) {
+          return console.log(error.response.data);
+        });
+      }
     }
   }
 });
@@ -6845,7 +6881,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, "\n.modback[data-v-520c033e]{\nposition: fixed; /* Stay in place */\nz-index: 1; /* Sit on top */\nleft: 0;\ntop: 0;\nwidth: 100%; /* Full width */\nheight: 100%; /* Full height */\noverflow: scroll; /* Enable scroll if needed */\nbackground-color: rgb(0,0,0)!important; /* Fallback color */\nbackground-color: rgba(0,0,0,0.3)!important; /* Black w/ opacity */\n}\n.spinner[data-v-520c033e]{\nposition: absolute;\nz-index: 1;\nleft: 47%;\ntop: 40%;\n}\n.modal-mask[data-v-520c033e] {\n    position: fixed;\n    z-index: 9998;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%;\n    background-color: rgba(228, 226, 226, 0.548);\n    display: table;\n    transition: opacity 0.3s ease;\n}\n.modal-wrapper[data-v-520c033e] {\n    display: table-cell;\n    vertical-align: middle;\n}\n.modal-container[data-v-520c033e] {\n    width: 900px;\n    margin: 0px auto;\n    padding: 20px 30px;\n    background-color: #fff;\n    border-radius: 2px;\n    box-shadow: 0 2px 8px rgba(247, 247, 247, 0.089);\n    transition: all 0.3s ease;\n    font-family: Helvetica, Arial, sans-serif;\n}\n.modal-header h3[data-v-520c033e] {\n    margin-top: 0;\n    color: #42b983;\n}\n.modal-body[data-v-520c033e] {\n    margin: 20px 0;\n}\n.modal-default-button[data-v-520c033e] {\n    float: right;\n}\n.modal-enter[data-v-520c033e] {\n    opacity: 0;\n}\n.modal-leave-active[data-v-520c033e] {\n    opacity: 0;\n}\n.modal-enter .modal-container[data-v-520c033e],\n.modal-leave-active .modal-container[data-v-520c033e] {\ntransform: scale(1.1);\n}\n", ""]);
+exports.push([module.i, "\n.modback[data-v-520c033e]{\n    position: fixed; /* Stay in place */\n    z-index: 1; /* Sit on top */\n    left: 0;\n    top: 0;\n    width: 100%; /* Full width */\n    height: 100%; /* Full height */\n    overflow: scroll; /* Enable scroll if needed */\n    background-color: rgb(0,0,0)!important; /* Fallback color */\n    background-color: rgba(0,0,0,0.3)!important; /* Black w/ opacity */\n}\n.spinner[data-v-520c033e]{\n    position: absolute;\n    z-index: 1;\n    left: 47%;\n    top: 40%;\n}\n.modal-mask[data-v-520c033e] {\n    position: fixed;\n    z-index: 9998;\n    top: 0;\n    left: 0;\n    width: 100%;\n    height: 100%;\n    background-color: rgba(228, 226, 226, 0.548);\n    display: table;\n    transition: opacity 0.3s ease;\n}\n.modal-wrapper[data-v-520c033e] {\n    display: table-cell;\n    vertical-align: middle;\n}\n.modal-container[data-v-520c033e] {\n    width: 900px;\n    margin: 0px auto;\n    padding: 20px 30px;\n    background-color: #fff;\n    border-radius: 2px;\n    box-shadow: 0 2px 8px rgba(247, 247, 247, 0.089);\n    transition: all 0.3s ease;\n    font-family: Helvetica, Arial, sans-serif;\n}\n.modal-header h3[data-v-520c033e] {\n    margin-top: 0;\n    color: #42b983;\n}\n.modal-body[data-v-520c033e] {\n    margin: 20px 0;\n}\n.modal-default-button[data-v-520c033e] {\n    float: right;\n}\n.modal-enter[data-v-520c033e] {\n    opacity: 0;\n}\n.modal-leave-active[data-v-520c033e] {\n    opacity: 0;\n}\n.modal-enter .modal-container[data-v-520c033e],\n.modal-leave-active .modal-container[data-v-520c033e] {\n    transform: scale(1.1);\n}\n", ""]);
 
 // exports
 
@@ -38792,14 +38828,18 @@ var render = function() {
         { attrs: { name: "fade", mode: "out-in" } },
         [
           _vm.showModal
-            ? _c("ListModal", {
-                attrs: { id: "exampleModal" },
-                on: {
-                  close: function($event) {
-                    _vm.showModal = false
+            ? _c(
+                "ListModal",
+                {
+                  attrs: { id: "exampleModal" },
+                  on: {
+                    close: function($event) {
+                      _vm.showModal = false
+                    }
                   }
-                }
-              })
+                },
+                [_vm._v("\n            Utwórz listę\n        ")]
+              )
             : _vm._e()
         ],
         1
@@ -38934,7 +38974,21 @@ var render = function() {
   return _c("div", { staticClass: "modback" }, [
     _c("div", { staticClass: "modal-dialog" }, [
       _c("div", { staticClass: "modal-content" }, [
-        _vm._m(0),
+        _c("div", { staticClass: "modal-header" }, [
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col pt-1" }, [
+              _c(
+                "h5",
+                {
+                  staticClass: "modal-title",
+                  attrs: { id: "exampleModalLabel" }
+                },
+                [_vm._t("default")],
+                2
+              )
+            ])
+          ])
+        ]),
         _vm._v(" "),
         _c("div", { staticClass: "modal-body" }, [
           _c("div", [
@@ -39041,7 +39095,7 @@ var render = function() {
                     _c(
                       "button",
                       {
-                        staticClass: "btn btn-primary mb-2",
+                        staticClass: "btn btn-primary mb-3",
                         on: { click: _vm.addProducktToList }
                       },
                       [_vm._v("Dodaj")]
@@ -39053,17 +39107,21 @@ var render = function() {
             _vm._v(" "),
             _c(
               "ul",
-              { staticClass: "list-group mx-5 px-5" },
+              { staticClass: "list-group mx-2" },
               _vm._l(_vm.list, function(product, index) {
                 return _c(
                   "li",
                   { key: index, staticClass: "list-group-item" },
                   [
-                    _vm._v(_vm._s(product) + "\n                            "),
+                    _vm._v(
+                      "\n                            " +
+                        _vm._s(product) +
+                        "\n                            "
+                    ),
                     _c(
                       "button",
                       {
-                        staticClass: "btn btn-secondary float-right",
+                        staticClass: "btn btn-secondary float-right btn-sm",
                         attrs: { type: "button" },
                         on: {
                           click: function($event) {
@@ -39103,35 +39161,19 @@ var render = function() {
               attrs: { type: "button" },
               on: {
                 click: function($event) {
-                  _vm.postList(), _vm.$emit("close")
+                  return _vm.postList()
                 }
               }
             },
-            [_vm._v("\n                    utwórz liste\n                ")]
+            [_vm._t("default")],
+            2
           )
         ])
       ])
     ])
   ])
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-header" }, [
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col pt-1" }, [
-          _c(
-            "h5",
-            { staticClass: "modal-title", attrs: { id: "exampleModalLabel" } },
-            [_vm._v("Utwórz liste")]
-          )
-        ])
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -56145,7 +56187,16 @@ var routes = [{
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-var actions = {//
+var actions = {
+  getList: function getList(context, payload) {
+    var _this = this;
+
+    axios.get('/list').then(function (response) {
+      return context.commit('getList', response.data);
+    })["catch"](function (error) {
+      return _this.errors = error.response.state;
+    });
+  }
 };
 /* harmony default export */ __webpack_exports__["default"] = (actions);
 
@@ -56163,6 +56214,9 @@ __webpack_require__.r(__webpack_exports__);
 var getters = {
   getData: function getData(state) {
     return state.data;
+  },
+  getList: function getList(state) {
+    return state.list;
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (getters);
@@ -56213,6 +56267,9 @@ __webpack_require__.r(__webpack_exports__);
 var mutations = {
   getData: function getData(state, payload) {
     state.data = payload;
+  },
+  getList: function getList(state, payload) {
+    state.list = payload;
   }
 };
 /* harmony default export */ __webpack_exports__["default"] = (mutations);
@@ -56229,7 +56286,8 @@ var mutations = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 var state = {
-  data: true
+  data: true,
+  list: ''
 };
 /* harmony default export */ __webpack_exports__["default"] = (state);
 

@@ -94,7 +94,27 @@ class ProductListController extends Controller
      */
     public function update(Request $request)
     {
-        dd($request);
+        ProductList::where('id', '=',  $request->id)->delete();
+
+        $user_id = Auth::user()->id;
+
+        $list = new ProductList;
+        $list->user_id = $user_id;
+        $list->name = $request->name;
+        $list->date = $request->date;
+        $list->pending = 1;
+        $list->save();
+
+        $list_id = $list->id;
+
+        for($i=0;$i<count($request->list);$i++){
+            $item = new ListItem;
+            $item->product_list_id = $list_id;
+            $item->product_name = $request->list[$i];
+            $item->save();
+        }
+
+        return ['message' => 'list created'];
     }
 
     public function archiveupdate(Request $request)

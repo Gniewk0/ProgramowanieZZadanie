@@ -1,7 +1,9 @@
 <template>
 <div>
     <transition name="fade" mode="out-in">
-        <ListModal v-if="showModal" @close="showModal = false" id="exampleModal"></ListModal>
+        <ListModal v-if="showModal" @close="showModal = false" id="exampleModal">
+            Utwórz listę
+        </ListModal>
     </transition>
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark py-0">

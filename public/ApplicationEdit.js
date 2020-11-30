@@ -9,6 +9,7 @@
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _UserPanelListModal__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./UserPanelListModal */ "./resources/js/components/UserPanelListModal.vue");
 //
 //
 //
@@ -46,15 +47,25 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       new_product: '',
       lists: [],
-      disabledCheckbox: false
+      disabledCheckbox: false,
+      showModal: false,
+      modaldata: []
     };
   },
-  compnts: {},
+  components: {
+    ListModal: _UserPanelListModal__WEBPACK_IMPORTED_MODULE_0__["default"]
+  },
   mounted: function mounted() {
     this.getArchiveLists();
   },
@@ -84,6 +95,13 @@ __webpack_require__.r(__webpack_exports__);
           return _this2.errors.record(error.response.data);
         });
       }
+    },
+    New: function New(data) {
+      for (var i = 0; i < data.length; i++) {
+        this.modaldata.push(data[i].product_name);
+      }
+
+      this.showModal = true;
     }
   }
 });
@@ -101,6 +119,8 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../store */ "./resources/js/store/index.js");
 /* harmony import */ var _UserPanelListModal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./UserPanelListModal */ "./resources/js/components/UserPanelListModal.vue");
+//
+//
 //
 //
 //
@@ -176,19 +196,26 @@ __webpack_require__.r(__webpack_exports__);
   computed: {
     vuexdata: function vuexdata() {
       return this.$store.getters.getData;
+    },
+    mainlist: {
+      get: function get() {
+        return this.$store.getters.getList;
+      },
+      set: function set(value) {
+        this.$store.commit('getList', value);
+      }
     }
   },
   watch: {
     vuexdata: function vuexdata(newVal, oldVal) {
-      // console.log(newVal)
       if (newVal == false) {
-        this.getLists();
+        this.getList();
         this.$store.commit('getData', true);
       }
     }
   },
   mounted: function mounted() {
-    this.getLists();
+    this.getList();
   },
   methods: {
     testadd: function testadd() {},
@@ -204,24 +231,18 @@ __webpack_require__.r(__webpack_exports__);
         return _this.errors.record(error.response.data);
       });
     },
-    getLists: function getLists() {
-      var _this2 = this;
-
-      axios.get('/list').then(function (response) {
-        return _this2.lists = response.data;
-      })["catch"](function (error) {
-        return _this2.errors.record(error.response.data);
-      });
+    getList: function getList() {
+      this.$store.dispatch('getList');
     },
     AddToArchive: function AddToArchive(id) {
-      var _this3 = this;
+      var _this2 = this;
 
       axios.post('/archivelist', {
         id: id
       }).then(function (response) {
-        return _this3.getLists();
+        return _this2.getList();
       })["catch"](function (error) {
-        return _this3.errors.record(error.response.data);
+        return _this2.errors.record(error.response.data);
       });
     }
   }
@@ -293,128 +314,171 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c(
-      "div",
-      { staticClass: "mx-5 px-5", attrs: { id: "accordion" } },
-      _vm._l(_vm.lists, function(list) {
-        return _c("div", { key: list.id, staticClass: "card my-2" }, [
-          _c(
-            "div",
-            { staticClass: "card-header", attrs: { id: "heading" + list.id } },
-            [
-              _c("h5", { staticClass: "mb-0" }, [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-link",
-                    attrs: {
-                      "data-toggle": "collapse",
-                      "data-target": "#collapse" + list.id,
-                      "aria-controls": "collapse" + list.id
+  return _c(
+    "div",
+    [
+      _c(
+        "transition",
+        { attrs: { name: "fade", mode: "out-in" } },
+        [
+          _vm.showModal
+            ? _c(
+                "ListModal",
+                {
+                  attrs: { id: "exampleModal", modaldata: _vm.modaldata },
+                  on: {
+                    close: function($event) {
+                      ;(_vm.showModal = false), (_vm.modaldata = "")
                     }
-                  },
-                  [
-                    _vm._v(
-                      "\n                        " +
-                        _vm._s(list.name) +
-                        "  -  " +
-                        _vm._s(list.date) +
-                        "\n                    "
-                    )
-                  ]
-                ),
-                _vm._v(" "),
-                _c("div", { staticClass: "float-right" }, [
-                  _c("div", { staticClass: "dropdown show" }, [
-                    _c("a", {
-                      staticClass: "btn btn-secondary dropdown-toggle",
+                  }
+                },
+                [_vm._v("\n            Utwórz listę\n        ")]
+              )
+            : _vm._e()
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "mx-5 px-5", attrs: { id: "accordion" } },
+        _vm._l(_vm.lists, function(list) {
+          return _c("div", { key: list.id, staticClass: "card my-2" }, [
+            _c(
+              "div",
+              {
+                staticClass: "card-header",
+                attrs: { id: "heading" + list.id }
+              },
+              [
+                _c("h5", { staticClass: "mb-0" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-link",
                       attrs: {
-                        href: "#",
-                        role: "button",
-                        id: "dropdownMenuLink",
-                        "data-toggle": "dropdown",
-                        "aria-haspopup": "true",
-                        "aria-expanded": "false"
+                        "data-toggle": "collapse",
+                        "data-target": "#collapse" + list.id,
+                        "aria-controls": "collapse" + list.id
                       }
-                    }),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      {
-                        staticClass: "dropdown-menu dropdown-menu-right",
-                        attrs: { "aria-labelledby": "dropdownMenuLink" }
-                      },
-                      [
-                        _c(
-                          "a",
-                          {
-                            staticClass: "dropdown-item",
-                            attrs: { href: "#" },
-                            on: {
-                              click: function($event) {
-                                return _vm.Delete(list.id)
+                    },
+                    [
+                      _vm._v(
+                        "\n                        " +
+                          _vm._s(list.name) +
+                          "  -  " +
+                          _vm._s(list.date) +
+                          "\n                    "
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "float-right" }, [
+                    _c("div", { staticClass: "dropdown show" }, [
+                      _c("a", {
+                        staticClass: "btn btn-secondary dropdown-toggle",
+                        attrs: {
+                          href: "#",
+                          role: "button",
+                          id: "dropdownMenuLink",
+                          "data-toggle": "dropdown",
+                          "aria-haspopup": "true",
+                          "aria-expanded": "false"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass: "dropdown-menu dropdown-menu-right",
+                          attrs: { "aria-labelledby": "dropdownMenuLink" }
+                        },
+                        [
+                          _c(
+                            "a",
+                            {
+                              staticClass: "dropdown-item",
+                              attrs: { href: "#" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.Delete(list.id)
+                                }
                               }
-                            }
-                          },
-                          [_vm._v("usuń")]
-                        )
-                      ]
-                    )
+                            },
+                            [_vm._v("usuń")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "a",
+                            {
+                              staticClass: "dropdown-item",
+                              attrs: { href: "#" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.New(list.listitem)
+                                }
+                              }
+                            },
+                            [_vm._v("nowa lista")]
+                          )
+                        ]
+                      )
+                    ])
                   ])
                 ])
-              ])
-            ]
-          ),
-          _vm._v(" "),
-          _c(
-            "div",
-            {
-              staticClass: "collapse",
-              attrs: {
-                id: "collapse" + list.id,
-                "aria-labelledby": "heading" + list.id,
-                "data-parent": "#accordion"
-              }
-            },
-            [
-              _c(
-                "ul",
-                { staticClass: "list-group" },
-                _vm._l(list.listitem, function(product, index) {
-                  return _c(
-                    "li",
-                    { key: index, staticClass: "list-group-item" },
-                    [
-                      _c("div", { staticClass: "form-check" }, [
-                        _c(
-                          "label",
-                          {
-                            staticClass: "form-check-label",
-                            class: { line_through: product.is_bought },
-                            attrs: { for: "Check" + list.id }
-                          },
-                          [
-                            _vm._v(
-                              "\n                                " +
-                                _vm._s(product.product_name) +
-                                "\n                            "
-                            )
-                          ]
-                        )
-                      ])
-                    ]
-                  )
-                }),
-                0
-              )
-            ]
-          )
-        ])
-      }),
-      0
-    )
-  ])
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "collapse",
+                attrs: {
+                  id: "collapse" + list.id,
+                  "aria-labelledby": "heading" + list.id,
+                  "data-parent": "#accordion"
+                }
+              },
+              [
+                _c(
+                  "ul",
+                  { staticClass: "list-group" },
+                  _vm._l(list.listitem, function(product, index) {
+                    return _c(
+                      "li",
+                      { key: index, staticClass: "list-group-item" },
+                      [
+                        _c("div", { staticClass: "form-check" }, [
+                          _c(
+                            "label",
+                            {
+                              staticClass: "form-check-label",
+                              class: { line_through: product.is_bought },
+                              attrs: { for: "Check" + list.id }
+                            },
+                            [
+                              _vm._v(
+                                "\n                                " +
+                                  _vm._s(product.product_name) +
+                                  "\n                            "
+                              )
+                            ]
+                          )
+                        ])
+                      ]
+                    )
+                  }),
+                  0
+                )
+              ]
+            )
+          ])
+        }),
+        0
+      )
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -446,14 +510,23 @@ var render = function() {
         { attrs: { name: "fade", mode: "out-in" } },
         [
           _vm.showEdit
-            ? _c("ListModal", {
-                attrs: { id: "exampleModal", modalEditId: _vm.modalEditId },
-                on: {
-                  close: function($event) {
-                    _vm.showEdit = false
+            ? _c(
+                "ListModal",
+                {
+                  attrs: {
+                    id: "exampleModal",
+                    modalEditId: _vm.modalEditId,
+                    modalEditName: _vm.modalEditName,
+                    modalEditDate: _vm.modalEditDate
+                  },
+                  on: {
+                    close: function($event) {
+                      _vm.showEdit = false
+                    }
                   }
-                }
-              })
+                },
+                [_vm._v("\n            Edytuj Liste\n        ")]
+              )
             : _vm._e()
         ],
         1
@@ -462,7 +535,7 @@ var render = function() {
       _c(
         "div",
         { staticClass: "mx-5 px-5", attrs: { id: "accordion" } },
-        _vm._l(_vm.lists, function(list) {
+        _vm._l(_vm.mainlist, function(list) {
           return _c("div", { key: list.id, staticClass: "card my-2" }, [
             _c(
               "div",
@@ -536,6 +609,8 @@ var render = function() {
                               on: {
                                 click: function($event) {
                                   ;(_vm.modalEditId = list.id),
+                                    (_vm.modalEditName = list.name),
+                                    (_vm.modalEditDate = list.date),
                                     (_vm.showEdit = true)
                                 }
                               }

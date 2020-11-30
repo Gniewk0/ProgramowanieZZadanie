@@ -5,7 +5,9 @@
                 <div class="modal-header">
                     <div class="row">
                         <div class="col pt-1">
-                            <h5 class="modal-title" id="exampleModalLabel">Utwórz liste</h5>
+                            <h5 class="modal-title" id="exampleModalLabel">
+                                <slot></slot>
+                            </h5>
                         </div>
                     </div>
                 </div>
@@ -26,14 +28,15 @@
                                     <input type="text" class="form-control mb-2" id="inlineFormInput" placeholder="Produkt" v-model="new_product">
                                 </div>
                                 <div class="col-auto">
-                                    <button class="btn btn-primary mb-2" @click="addProducktToList">Dodaj</button>
+                                    <button class="btn btn-primary mb-3" @click="addProducktToList">Dodaj</button>
                                 </div>
                             </div>
                         </form>
 
-                        <ul class="list-group mx-5 px-5">
-                            <li class="list-group-item" v-for="(product, index) in list" :key="index">{{product}}
-                                <button type="button" class="btn btn-secondary float-right" @click="deleteProduct(product)">X</button>
+                        <ul class="list-group mx-2">
+                            <li class="list-group-item" v-for="(product, index) in list" :key="index">
+                                {{product}}
+                                <button type="button" class="btn btn-secondary float-right btn-sm" @click="deleteProduct(product)">X</button>
                             </li>
                         </ul>
                     </div>
@@ -42,8 +45,8 @@
                     <button type="button" class="btn btn-secondary" @click="$emit('close')">
                         zamknij
                     </button>
-                    <button type="button" class="btn btn-secondary" @click="postList(), $emit('close')">
-                        utwórz liste
+                    <button type="button" class="btn btn-secondary" @click="postList()">
+                        <slot></slot>
                     </button>
                 </div>
             </div>
@@ -63,19 +66,44 @@
             }
         },
         mounted() {
-            this.getList()
             if(this.modalEditId){
-                this.getList()
+                console.log('wbijam do funkcji')
+                this.date = this.modalEditDate
+                this.name = this.modalEditName
+                for(var i=0; i<this.mainlist.length; i++){
+                    console.log('wbijam do pętli')
+                    if(this.mainlist[i].id == this.modalEditId){
+                        for(var j=0; j<this.mainlist[i].listitem.length; j++){
+                            this.list.push(this.mainlist[i].listitem[j].product_name)
+                        }
+                    }
+                }
+            }else if(this.modaldata) {
+                this.list = this.modaldata
             }
         },
         props: {
-            modalEditId: Number
+            modalEditId: Number,
+            modalEditName: String,
+            modalEditDate: String,
+            modaldata: Array
         },
         computed: {
+            mainlist: {
+                get () {
+                    return this.$store.getters.getList
+                },
+                set (value) {
+                    this.$store.commit('getList', value);
+                }
+            },
         },
         watch: {
         },
         methods: {
+            emitMethod() {
+                this.$emit('close')
+            },
             addProducktToList(){
                 this.list.push(this.new_product)
                 this.new_product = ''
@@ -87,15 +115,16 @@
                     }
                 }
             },
-            getList(){
-                axios.get('/list')
-                    .then(response => this.list = response.data)
-                    .catch(error => this.errors.record(error.response.data));
-            },
             postList(){
-                axios.post('/list', { list: this.list, name: this.name, date: this.date })
-                    .then(response => console.log(response.data))
-                    .catch(error => this.errors.record(error.response.data));
+                if(!this.modalEditId){
+                    axios.post('/list', { list: this.list, name: this.name, date: this.date })
+                        .then(response => this.emitMethod())
+                        .catch(error => console.log(error.response.data));
+                }else{
+                    axios.put('/list', { id: this.modalEditId, list: this.list, name: this.name, date: this.date })
+                        .then(response => this.emitMethod())
+                        .catch(error => console.log(error.response.data));
+                }
             },
         }
     }
@@ -103,22 +132,22 @@
 
 <style scoped>
     .modback{
-    position: fixed; /* Stay in place */
-    z-index: 1; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    overflow: scroll; /* Enable scroll if needed */
-    background-color: rgb(0,0,0)!important; /* Fallback color */
-    background-color: rgba(0,0,0,0.3)!important; /* Black w/ opacity */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: scroll; /* Enable scroll if needed */
+        background-color: rgb(0,0,0)!important; /* Fallback color */
+        background-color: rgba(0,0,0,0.3)!important; /* Black w/ opacity */
     }
 
     .spinner{
-    position: absolute;
-    z-index: 1;
-    left: 47%;
-    top: 40%;
+        position: absolute;
+        z-index: 1;
+        left: 47%;
+        top: 40%;
     }
 
     .modal-mask {
@@ -172,7 +201,7 @@
 
     .modal-enter .modal-container,
     .modal-leave-active .modal-container {
-    -webkit-transform: scale(1.1);
-    transform: scale(1.1);
+        -webkit-transform: scale(1.1);
+        transform: scale(1.1);
     }
 </style>

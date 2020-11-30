@@ -1,5 +1,10 @@
 <template>
     <div>
+        <transition name="fade" mode="out-in">
+            <ListModal v-if="showModal" @close="showModal = false, modaldata = ''" id="exampleModal" :modaldata="modaldata">
+                Utwórz listę
+            </ListModal>
+        </transition>
         <div id="accordion" class="mx-5 px-5">
             <div class="card my-2" v-for="list in lists" :key="list.id">
                 <div class="card-header" v-bind:id="'heading'+list.id">
@@ -9,10 +14,10 @@
                         </button>
                         <div class="float-right">
                             <div class="dropdown show">
-                                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                </a>
+                                <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"></a>
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
                                     <a class="dropdown-item" href="#" @click="Delete(list.id)">usuń</a>
+                                    <a class="dropdown-item" href="#" @click="New(list.listitem)">nowa lista</a>
                                 </div>
                             </div>
                         </div>
@@ -36,15 +41,19 @@
 </template>
 
 <script>
+    import ListModal from './UserPanelListModal';
     export default {
         data(){
             return {
                 new_product: '',
                 lists: [],
                 disabledCheckbox: false,
+                showModal: false,
+                modaldata: []
             }
         },
-        compnts: {
+        components: {
+            ListModal
         },
         mounted() {
             this.getArchiveLists();
@@ -65,6 +74,12 @@
                         .then(response => this.getArchiveLists())
                         .catch(error => this.errors.record(error.response.data));
                 }
+            },
+            New(data){
+                for(var i=0; i<data.length; i++){
+                    this.modaldata.push(data[i].product_name)
+                }
+                this.showModal = true
             }
         }
     }
