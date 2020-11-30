@@ -2236,10 +2236,7 @@ Vue.use(vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      new_product: '',
-      list: [],
-      showModal: false,
-      listReload: false
+      showModal: false
     };
   },
   components: {
@@ -2250,7 +2247,6 @@ Vue.use(vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]);
       name: 'Index'
     })["catch"](function () {});
   },
-  computed: {},
   watch: {
     showModal: function showModal(newVal, oldVal) {
       if (newVal == false) {
@@ -2349,8 +2345,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2361,7 +2355,14 @@ __webpack_require__.r(__webpack_exports__);
     };
   },
   mounted: function mounted() {
-    this.getLists();
+    this.getList();
+
+    if (this.modalEditId) {
+      this.getList();
+    }
+  },
+  props: {
+    modalEditId: Number
   },
   computed: {},
   watch: {},
@@ -2377,11 +2378,11 @@ __webpack_require__.r(__webpack_exports__);
         }
       }
     },
-    getLists: function getLists() {
+    getList: function getList() {
       var _this = this;
 
       axios.get('/list').then(function (response) {
-        return console.log(response.data);
+        return _this.list = response.data;
       })["catch"](function (error) {
         return _this.errors.record(error.response.data);
       });
@@ -38933,62 +38934,60 @@ var render = function() {
   return _c("div", { staticClass: "modback" }, [
     _c("div", { staticClass: "modal-dialog" }, [
       _c("div", { staticClass: "modal-content" }, [
-        _c("div", { staticClass: "modal-header" }, [
-          _c("div", { staticClass: "row" }, [
-            _vm._m(0),
-            _vm._v(" "),
-            _c("div", { staticClass: "col" }, [
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.name,
-                    expression: "name"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text", placeholder: "Nazwa" },
-                domProps: { value: _vm.name },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.name = $event.target.value
-                  }
-                }
-              })
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col" }, [
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.date,
-                    expression: "date"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "date" },
-                domProps: { value: _vm.date },
-                on: {
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
-                    }
-                    _vm.date = $event.target.value
-                  }
-                }
-              })
-            ])
-          ])
-        ]),
+        _vm._m(0),
         _vm._v(" "),
         _c("div", { staticClass: "modal-body" }, [
           _c("div", [
+            _c("div", { staticClass: "row mb-4" }, [
+              _c("div", { staticClass: "col" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.name,
+                      expression: "name"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { type: "text", placeholder: "Nazwa" },
+                  domProps: { value: _vm.name },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.name = $event.target.value
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "col" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.date,
+                      expression: "date"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: { type: "date" },
+                  domProps: { value: _vm.date },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.date = $event.target.value
+                    }
+                  }
+                })
+              ])
+            ]),
+            _vm._v(" "),
             _c(
               "form",
               {
@@ -39108,7 +39107,7 @@ var render = function() {
                 }
               }
             },
-            [_vm._v("\n                    utwórz komunikat\n                ")]
+            [_vm._v("\n                    utwórz liste\n                ")]
           )
         ])
       ])
@@ -39120,12 +39119,16 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "col pt-1" }, [
-      _c(
-        "h5",
-        { staticClass: "modal-title", attrs: { id: "exampleModalLabel" } },
-        [_vm._v("Utwórz liste")]
-      )
+    return _c("div", { staticClass: "modal-header" }, [
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col pt-1" }, [
+          _c(
+            "h5",
+            { staticClass: "modal-title", attrs: { id: "exampleModalLabel" } },
+            [_vm._v("Utwórz liste")]
+          )
+        ])
+      ])
     ])
   }
 ]

@@ -7,26 +7,24 @@
                         <div class="col pt-1">
                             <h5 class="modal-title" id="exampleModalLabel">Utwórz liste</h5>
                         </div>
-                        <div class="col">
-                            <input type="text" class="form-control" placeholder="Nazwa" v-model="name">
-                        </div>
-                        <div class="col">
-                            <input type="date" class="form-control" v-model="date">
-                        </div>
                     </div>
                 </div>
                 <div class="modal-body">
                     <div>
+                        <div class="row mb-4">
+                            <div class="col">
+                                <input type="text" class="form-control" placeholder="Nazwa" v-model="name">
+                            </div>
+                            <div class="col">
+                                <input type="date" class="form-control" v-model="date">
+                            </div>
+                        </div>
                         <form class="d-flex justify-content-center" v-on:submit.prevent>
                             <div class="form-row align-items-center">
                                 <div class="col-auto">
                                     <label class="sr-only" for="inlineFormInput">Produkt</label>
                                     <input type="text" class="form-control mb-2" id="inlineFormInput" placeholder="Produkt" v-model="new_product">
                                 </div>
-                                <!-- <div class="col-2">
-                                    <label class="sr-only" for="inlineFormInput">ilość</label>
-                                    <input type="number" class="form-control mb-2" id="inlineFormInput" placeholder="ilość">
-                                </div> -->
                                 <div class="col-auto">
                                     <button class="btn btn-primary mb-2" @click="addProducktToList">Dodaj</button>
                                 </div>
@@ -45,7 +43,7 @@
                         zamknij
                     </button>
                     <button type="button" class="btn btn-secondary" @click="postList(), $emit('close')">
-                        utwórz komunikat
+                        utwórz liste
                     </button>
                 </div>
             </div>
@@ -65,7 +63,13 @@
             }
         },
         mounted() {
-            this.getLists()
+            this.getList()
+            if(this.modalEditId){
+                this.getList()
+            }
+        },
+        props: {
+            modalEditId: Number
         },
         computed: {
         },
@@ -83,9 +87,9 @@
                     }
                 }
             },
-            getLists(){
+            getList(){
                 axios.get('/list')
-                    .then(response => console.log(response.data))
+                    .then(response => this.list = response.data)
                     .catch(error => this.errors.record(error.response.data));
             },
             postList(){

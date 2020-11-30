@@ -1,5 +1,8 @@
 <template>
     <div>
+        <transition name="fade" mode="out-in">
+            <ListModal v-if="showEdit" @close="showEdit = false" id="exampleModal" :modalEditId="modalEditId"></ListModal>
+        </transition>
         <div id="accordion" class="mx-5 px-5">
             <div class="card my-2" v-for="list in lists" :key="list.id">
                 <div class="card-header" v-bind:id="'heading'+list.id">
@@ -13,6 +16,7 @@
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
                                     <a class="dropdown-item" href="#" @click="AddToArchive(list.id)">zarchiwizuj</a>
+                                    <a class="dropdown-item" href="#" @click="modalEditId = list.id, showEdit = true">edytuj</a>
                                 </div>
                             </div>
                         </div>
@@ -53,13 +57,19 @@
 
 <script>
     import store from "../store"
+    import ListModal from './UserPanelListModal';
     export default {
         data(){
             return {
                 new_product: '',
                 lists: [],
                 disabledCheckbox: false,
+                showEdit: false,
+                modalEditId: '',
             }
+        },
+        components: {
+            ListModal,
         },
         computed: {
             vuexdata(){

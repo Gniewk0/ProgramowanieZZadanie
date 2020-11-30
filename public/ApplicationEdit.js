@@ -100,6 +100,11 @@ __webpack_require__.r(__webpack_exports__);
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _store__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../store */ "./resources/js/store/index.js");
+/* harmony import */ var _UserPanelListModal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./UserPanelListModal */ "./resources/js/components/UserPanelListModal.vue");
+//
+//
+//
+//
 //
 //
 //
@@ -154,13 +159,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 
+
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       new_product: '',
       lists: [],
-      disabledCheckbox: false
+      disabledCheckbox: false,
+      showEdit: false,
+      modalEditId: ''
     };
+  },
+  components: {
+    ListModal: _UserPanelListModal__WEBPACK_IMPORTED_MODULE_1__["default"]
   },
   computed: {
     vuexdata: function vuexdata() {
@@ -427,192 +438,235 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c(
-      "div",
-      { staticClass: "mx-5 px-5", attrs: { id: "accordion" } },
-      _vm._l(_vm.lists, function(list) {
-        return _c("div", { key: list.id, staticClass: "card my-2" }, [
-          _c(
-            "div",
-            { staticClass: "card-header", attrs: { id: "heading" + list.id } },
-            [
-              _c("h5", { staticClass: "mb-0" }, [
-                _c(
-                  "button",
-                  {
-                    staticClass: "btn btn-link",
-                    attrs: {
-                      "data-toggle": "collapse",
-                      "data-target": "#collapse" + list.id,
-                      "aria-controls": "collapse" + list.id
-                    }
-                  },
-                  [
-                    _vm._v(
-                      "\n                        " +
-                        _vm._s(list.name) +
-                        "  -  " +
-                        _vm._s(list.date) +
-                        "\n                    "
-                    )
-                  ]
-                ),
-                _vm._v(" "),
-                _c("div", { staticClass: "float-right" }, [
-                  _c("div", { staticClass: "dropdown show" }, [
-                    _c("a", {
-                      staticClass: "btn btn-secondary dropdown-toggle",
+  return _c(
+    "div",
+    [
+      _c(
+        "transition",
+        { attrs: { name: "fade", mode: "out-in" } },
+        [
+          _vm.showEdit
+            ? _c("ListModal", {
+                attrs: { id: "exampleModal", modalEditId: _vm.modalEditId },
+                on: {
+                  close: function($event) {
+                    _vm.showEdit = false
+                  }
+                }
+              })
+            : _vm._e()
+        ],
+        1
+      ),
+      _vm._v(" "),
+      _c(
+        "div",
+        { staticClass: "mx-5 px-5", attrs: { id: "accordion" } },
+        _vm._l(_vm.lists, function(list) {
+          return _c("div", { key: list.id, staticClass: "card my-2" }, [
+            _c(
+              "div",
+              {
+                staticClass: "card-header",
+                attrs: { id: "heading" + list.id }
+              },
+              [
+                _c("h5", { staticClass: "mb-0" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-link",
                       attrs: {
-                        href: "#",
-                        role: "button",
-                        id: "dropdownMenuLink",
-                        "data-toggle": "dropdown",
-                        "aria-haspopup": "true",
-                        "aria-expanded": "false"
+                        "data-toggle": "collapse",
+                        "data-target": "#collapse" + list.id,
+                        "aria-controls": "collapse" + list.id
                       }
-                    }),
-                    _vm._v(" "),
-                    _c(
-                      "div",
-                      {
-                        staticClass: "dropdown-menu dropdown-menu-right",
-                        attrs: { "aria-labelledby": "dropdownMenuLink" }
-                      },
-                      [
-                        _c(
-                          "a",
-                          {
-                            staticClass: "dropdown-item",
-                            attrs: { href: "#" },
-                            on: {
-                              click: function($event) {
-                                return _vm.AddToArchive(list.id)
+                    },
+                    [
+                      _vm._v(
+                        "\n                        " +
+                          _vm._s(list.name) +
+                          "  -  " +
+                          _vm._s(list.date) +
+                          "\n                    "
+                      )
+                    ]
+                  ),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "float-right" }, [
+                    _c("div", { staticClass: "dropdown show" }, [
+                      _c("a", {
+                        staticClass: "btn btn-secondary dropdown-toggle",
+                        attrs: {
+                          href: "#",
+                          role: "button",
+                          id: "dropdownMenuLink",
+                          "data-toggle": "dropdown",
+                          "aria-haspopup": "true",
+                          "aria-expanded": "false"
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass: "dropdown-menu dropdown-menu-right",
+                          attrs: { "aria-labelledby": "dropdownMenuLink" }
+                        },
+                        [
+                          _c(
+                            "a",
+                            {
+                              staticClass: "dropdown-item",
+                              attrs: { href: "#" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.AddToArchive(list.id)
+                                }
                               }
-                            }
-                          },
-                          [_vm._v("zarchiwizuj")]
-                        )
-                      ]
-                    )
+                            },
+                            [_vm._v("zarchiwizuj")]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "a",
+                            {
+                              staticClass: "dropdown-item",
+                              attrs: { href: "#" },
+                              on: {
+                                click: function($event) {
+                                  ;(_vm.modalEditId = list.id),
+                                    (_vm.showEdit = true)
+                                }
+                              }
+                            },
+                            [_vm._v("edytuj")]
+                          )
+                        ]
+                      )
+                    ])
                   ])
                 ])
-              ])
-            ]
-          ),
-          _vm._v(" "),
-          _c(
-            "div",
-            {
-              staticClass: "collapse",
-              attrs: {
-                id: "collapse" + list.id,
-                "aria-labelledby": "heading" + list.id,
-                "data-parent": "#accordion"
-              }
-            },
-            [
-              _c(
-                "ul",
-                { staticClass: "list-group" },
-                _vm._l(list.listitem, function(product, index) {
-                  return _c(
-                    "li",
-                    { key: index, staticClass: "list-group-item" },
-                    [
-                      _c("div", { staticClass: "form-check" }, [
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: product.is_bought,
-                              expression: "product.is_bought"
-                            }
-                          ],
-                          staticClass: "form-check-input",
-                          attrs: {
-                            type: "checkbox",
-                            "true-value": 1,
-                            "false-value": 0,
-                            id: "Check" + product.id,
-                            disabled: _vm.disabledCheckbox
-                          },
-                          domProps: {
-                            checked: Array.isArray(product.is_bought)
-                              ? _vm._i(product.is_bought, null) > -1
-                              : _vm._q(product.is_bought, 1)
-                          },
-                          on: {
-                            change: [
-                              function($event) {
-                                var $$a = product.is_bought,
-                                  $$el = $event.target,
-                                  $$c = $$el.checked ? 1 : 0
-                                if (Array.isArray($$a)) {
-                                  var $$v = null,
-                                    $$i = _vm._i($$a, $$v)
-                                  if ($$el.checked) {
-                                    $$i < 0 &&
-                                      _vm.$set(
-                                        product,
-                                        "is_bought",
-                                        $$a.concat([$$v])
-                                      )
-                                  } else {
-                                    $$i > -1 &&
-                                      _vm.$set(
-                                        product,
-                                        "is_bought",
-                                        $$a
-                                          .slice(0, $$i)
-                                          .concat($$a.slice($$i + 1))
-                                      )
-                                  }
-                                } else {
-                                  _vm.$set(product, "is_bought", $$c)
-                                }
-                              },
-                              function($event) {
-                                return _vm.handleUpdate(product)
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "collapse",
+                attrs: {
+                  id: "collapse" + list.id,
+                  "aria-labelledby": "heading" + list.id,
+                  "data-parent": "#accordion"
+                }
+              },
+              [
+                _c(
+                  "ul",
+                  { staticClass: "list-group" },
+                  _vm._l(list.listitem, function(product, index) {
+                    return _c(
+                      "li",
+                      { key: index, staticClass: "list-group-item" },
+                      [
+                        _c("div", { staticClass: "form-check" }, [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: product.is_bought,
+                                expression: "product.is_bought"
                               }
-                            ]
-                          }
-                        }),
-                        _vm._v(" "),
-                        _c(
-                          "label",
-                          {
-                            staticClass: "form-check-label",
-                            class: { line_through: product.is_bought },
-                            attrs: { for: "Check" + product.id, disabled: "" },
+                            ],
+                            staticClass: "form-check-input",
+                            attrs: {
+                              type: "checkbox",
+                              "true-value": 1,
+                              "false-value": 0,
+                              id: "Check" + product.id,
+                              disabled: _vm.disabledCheckbox
+                            },
+                            domProps: {
+                              checked: Array.isArray(product.is_bought)
+                                ? _vm._i(product.is_bought, null) > -1
+                                : _vm._q(product.is_bought, 1)
+                            },
                             on: {
-                              change: function($event) {
-                                return _vm.handleUpdate(product)
-                              }
+                              change: [
+                                function($event) {
+                                  var $$a = product.is_bought,
+                                    $$el = $event.target,
+                                    $$c = $$el.checked ? 1 : 0
+                                  if (Array.isArray($$a)) {
+                                    var $$v = null,
+                                      $$i = _vm._i($$a, $$v)
+                                    if ($$el.checked) {
+                                      $$i < 0 &&
+                                        _vm.$set(
+                                          product,
+                                          "is_bought",
+                                          $$a.concat([$$v])
+                                        )
+                                    } else {
+                                      $$i > -1 &&
+                                        _vm.$set(
+                                          product,
+                                          "is_bought",
+                                          $$a
+                                            .slice(0, $$i)
+                                            .concat($$a.slice($$i + 1))
+                                        )
+                                    }
+                                  } else {
+                                    _vm.$set(product, "is_bought", $$c)
+                                  }
+                                },
+                                function($event) {
+                                  return _vm.handleUpdate(product)
+                                }
+                              ]
                             }
-                          },
-                          [
-                            _vm._v(
-                              "\n                                " +
-                                _vm._s(product.product_name) +
-                                "\n                            "
-                            )
-                          ]
-                        )
-                      ])
-                    ]
-                  )
-                }),
-                0
-              )
-            ]
-          )
-        ])
-      }),
-      0
-    )
-  ])
+                          }),
+                          _vm._v(" "),
+                          _c(
+                            "label",
+                            {
+                              staticClass: "form-check-label",
+                              class: { line_through: product.is_bought },
+                              attrs: {
+                                for: "Check" + product.id,
+                                disabled: ""
+                              },
+                              on: {
+                                change: function($event) {
+                                  return _vm.handleUpdate(product)
+                                }
+                              }
+                            },
+                            [
+                              _vm._v(
+                                "\n                                " +
+                                  _vm._s(product.product_name) +
+                                  "\n                            "
+                              )
+                            ]
+                          )
+                        ])
+                      ]
+                    )
+                  }),
+                  0
+                )
+              ]
+            )
+          ])
+        }),
+        0
+      )
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true

@@ -45,10 +45,7 @@ import router from '../router'
     export default {
         data(){
             return {
-                new_product: '',
-                list: [],
                 showModal: false,
-                listReload: false,
             }
         },
         components: {
@@ -56,8 +53,6 @@ import router from '../router'
         },
         mounted() {
             router.push({name: 'Index'}).catch(()=>{});
-        },
-        computed: {
         },
         watch: {
             showModal(newVal, oldVal) {
