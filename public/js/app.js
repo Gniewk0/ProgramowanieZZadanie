@@ -38838,7 +38838,7 @@ var render = function() {
                     }
                   }
                 },
-                [_vm._v("\n            Utwórz listę\n        ")]
+                [_vm._v("\r\n            Utwórz listę\r\n        ")]
               )
             : _vm._e()
         ],
@@ -56311,8 +56311,8 @@ var state = {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Laragon\www\exercise\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Laragon\www\exercise\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! D:\laragon\www\ProgramowanieZZadanie\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! D:\laragon\www\ProgramowanieZZadanie\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

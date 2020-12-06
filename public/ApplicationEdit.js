@@ -178,6 +178,7 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -218,6 +219,9 @@ __webpack_require__.r(__webpack_exports__);
     this.getList();
   },
   methods: {
+    AlertMethod: function AlertMethod() {
+      alert('Opcja edycji jest czasowo niedostępna, proszę usunąć listę i stworzyć nową');
+    },
     testadd: function testadd() {},
     handleUpdate: function handleUpdate(product) {
       var _this = this;
@@ -608,10 +612,7 @@ var render = function() {
                               attrs: { href: "#" },
                               on: {
                                 click: function($event) {
-                                  ;(_vm.modalEditId = list.id),
-                                    (_vm.modalEditName = list.name),
-                                    (_vm.modalEditDate = list.date),
-                                    (_vm.showEdit = true)
+                                  return _vm.AlertMethod()
                                 }
                               }
                             },

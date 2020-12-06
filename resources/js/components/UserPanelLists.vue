@@ -18,7 +18,8 @@
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
                                     <a class="dropdown-item" href="#" @click="AddToArchive(list.id)">zarchiwizuj</a>
-                                    <a class="dropdown-item" href="#" @click="modalEditId = list.id, modalEditName = list.name, modalEditDate = list.date, showEdit = true">edytuj</a>
+                                    <!-- <a class="dropdown-item" href="#" @click="modalEditId = list.id, modalEditName = list.name, modalEditDate = list.date, showEdit = true">edytuj</a> -->
+                                    <a class="dropdown-item" href="#" @click="AlertMethod()">edytuj</a>
                                 </div>
                             </div>
                         </div>
@@ -98,6 +99,9 @@
             this.getList();
         },
         methods: {
+            AlertMethod(){
+                alert('Opcja edycji jest czasowo niedostępna, proszę usunąć listę i stworzyć nową')
+            },
             testadd(){
 
             },
