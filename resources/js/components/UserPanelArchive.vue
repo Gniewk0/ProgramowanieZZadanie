@@ -1,7 +1,7 @@
 <template>
     <div>
         <transition name="fade" mode="out-in">
-            <ListModal v-if="showModal" @close="showModal = false, modaldata = ''" id="exampleModal" :modaldata="modaldata">
+            <ListModal v-if="showModal" @close="showModal = false, modaldata = []" id="exampleModal" :modaldata="modaldata">
                 Utwórz listę
             </ListModal>
         </transition>

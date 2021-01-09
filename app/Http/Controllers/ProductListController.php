@@ -24,6 +24,11 @@ class ProductListController extends Controller
         return ProductList::with('listitem')->where('user_id', '=', Auth::user()->id)->where('pending', '=', 0)->get();
     }
 
+    public function search(Request $request)
+    {
+        return ProductList::with('listitem')->where('user_id', '=', Auth::user()->id)->where('pending', '=', 1)->where('name', 'like', $request->data.'%')->get();
+    }
+
     /**
      * Show the form for creating a new resource.
      *

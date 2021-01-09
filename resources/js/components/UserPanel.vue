@@ -25,8 +25,8 @@
                 </li>
             </ul>
             <form class="form-inline my-2 my-lg-0 py-2">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-secondary my-2 my-sm-0" type="submit">Szukaj</button>
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" v-model="search_value">
+                <button class="btn btn-outline-secondary mx-2 my-sm-0" @click="Search">Szukaj</button>
             </form>
         </div>
     </nav>
@@ -48,6 +48,7 @@ import router from '../router'
         data(){
             return {
                 showModal: false,
+                search_value: ''
             }
         },
         components: {
@@ -57,6 +58,11 @@ import router from '../router'
             router.push({name: 'Index'}).catch(()=>{});
         },
         watch: {
+            search_value(newVal, oldVal){
+                if(newVal !== oldVal){
+                    router.push({name: 'Index'}).catch(()=>{});
+                }
+            },
             showModal(newVal, oldVal) {
                 if(newVal == false){
                     this.$store.commit('getData', newVal);
@@ -64,6 +70,9 @@ import router from '../router'
             }
         },
         methods: {
+            Search(){
+                this.$router.push({name: 'Search', params: { value: this.search_value }}).catch(err => {})
+            },
             AddProducktToList(){
                 this.list.push(this.new_product)
                 this.new_product = ''

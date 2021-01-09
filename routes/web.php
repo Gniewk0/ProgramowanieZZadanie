@@ -27,3 +27,4 @@ Route::post('/list', [App\Http\Controllers\ProductListController::class, 'store'
 Route::put('/list', [App\Http\Controllers\ProductListController::class, 'update'])->name('updatelist');
 Route::put('/product', [App\Http\Controllers\ListItemController::class, 'update'])->name('product');
 Route::delete('/list', [App\Http\Controllers\ProductListController::class, 'destroy'])->name('updatelist');
+Route::get('/search', [App\Http\Controllers\ProductListController::class, 'search'])->name('search');

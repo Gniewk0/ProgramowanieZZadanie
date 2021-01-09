@@ -2238,7 +2238,8 @@ Vue.use(vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      showModal: false
+      showModal: false,
+      search_value: ''
     };
   },
   components: {
@@ -2250,6 +2251,13 @@ Vue.use(vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]);
     })["catch"](function () {});
   },
   watch: {
+    search_value: function search_value(newVal, oldVal) {
+      if (newVal !== oldVal) {
+        _router__WEBPACK_IMPORTED_MODULE_1__["default"].push({
+          name: 'Index'
+        })["catch"](function () {});
+      }
+    },
     showModal: function showModal(newVal, oldVal) {
       if (newVal == false) {
         this.$store.commit('getData', newVal);
@@ -2257,6 +2265,14 @@ Vue.use(vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]);
     }
   },
   methods: {
+    Search: function Search() {
+      this.$router.push({
+        name: 'Search',
+        params: {
+          value: this.search_value
+        }
+      })["catch"](function (err) {});
+    },
     AddProducktToList: function AddProducktToList() {
       this.list.push(this.new_product);
       this.new_product = '';
@@ -38905,7 +38921,42 @@ var render = function() {
                 )
               ]),
               _vm._v(" "),
-              _vm._m(0)
+              _c("form", { staticClass: "form-inline my-2 my-lg-0 py-2" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.search_value,
+                      expression: "search_value"
+                    }
+                  ],
+                  staticClass: "form-control mr-sm-2",
+                  attrs: {
+                    type: "search",
+                    placeholder: "Search",
+                    "aria-label": "Search"
+                  },
+                  domProps: { value: _vm.search_value },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.search_value = $event.target.value
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-outline-secondary mx-2 my-sm-0",
+                    on: { click: _vm.Search }
+                  },
+                  [_vm._v("Szukaj")]
+                )
+              ])
             ]
           )
         ]
@@ -38928,28 +38979,7 @@ var render = function() {
     1
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("form", { staticClass: "form-inline my-2 my-lg-0 py-2" }, [
-      _c("input", {
-        staticClass: "form-control mr-sm-2",
-        attrs: { type: "search", placeholder: "Search", "aria-label": "Search" }
-      }),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-outline-secondary my-2 my-sm-0",
-          attrs: { type: "submit" }
-        },
-        [_vm._v("Szukaj")]
-      )
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
@@ -56170,6 +56200,13 @@ var routes = [{
   component: function component() {
     return __webpack_require__.e(/*! import() | ApplicationEdit */ "ApplicationEdit").then(__webpack_require__.bind(null, /*! ./components/UserPanelArchive.vue */ "./resources/js/components/UserPanelArchive.vue"));
   }
+}, {
+  path: '/search/:value',
+  name: 'Search',
+  props: true,
+  component: function component() {
+    return __webpack_require__.e(/*! import() | ApplicationEdit */ "ApplicationEdit").then(__webpack_require__.bind(null, /*! ./components/UserPanelSearch.vue */ "./resources/js/components/UserPanelSearch.vue"));
+  }
 }];
 /* harmony default export */ __webpack_exports__["default"] = (new vue_router__WEBPACK_IMPORTED_MODULE_0__["default"]({
   // mode: 'history',
@@ -56311,8 +56348,8 @@ var state = {
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! D:\laragon\www\ProgramowanieZZadanie\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! D:\laragon\www\ProgramowanieZZadanie\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Laragon\www\ProgramowanieZZadanie\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Laragon\www\ProgramowanieZZadanie\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

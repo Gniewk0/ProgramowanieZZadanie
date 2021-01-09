@@ -64,8 +64,7 @@
     export default {
         data(){
             return {
-                new_product: '',
-                lists: [],
+                mainlist: [],
                 disabledCheckbox: false,
                 showEdit: false,
                 modalEditId: '',
@@ -74,36 +73,20 @@
         components: {
             ListModal,
         },
-        computed: {
-            vuexdata(){
-                return this.$store.getters.getData
-            },
-            mainlist: {
-                get () {
-                    return this.$store.getters.getList
-                },
-                set (value) {
-                    this.$store.commit('getList', value);
-                }
-            },
-        },
-        watch: {
-            vuexdata(newVal, oldVal) {
-                if(newVal == false){
-                    this.getList();
-                    this.$store.commit('getData', true);
-                }
-            }
+        props: {
+            value: String,
         },
         mounted() {
-            this.getList();
+            this.Search();
         },
         methods: {
+            Search(){
+                axios.get('/search', { params: { data: this.value }})
+                    .then(response => this.mainlist = response.data)
+                    .catch(error => this.errors.record(error.response.data));
+            },
             AlertMethod(){
                 alert('Opcja edycji jest czasowo niedostępna, proszę usunąć listę i stworzyć nową')
-            },
-            testadd(){
-
             },
             handleUpdate(product){
                 this.disabledCheckbox = true
@@ -111,12 +94,9 @@
                     .then(response => this.disabledCheckbox = false)
                     .catch(error => this.errors.record(error.response.data));
             },
-            getList(){
-                this.$store.dispatch('getList');
-            },
             AddToArchive(id){
                 axios.post('/archivelist', {id: id})
-                    .then(response => this.getList())
+                    .then(response => this.Search())
                     .catch(error => this.errors.record(error.response.data));
             }
         }
